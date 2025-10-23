@@ -2,7 +2,8 @@ const CACHE_NAME = 'momo-pos-cache-v1';
 const APP_SHELL_URLS = [
   '/',
   '/index.html',
-  '/vite.svg',
+  '/icon-192.svg',
+  '/icon-512.svg',
   '/manifest.json',
   '/index.tsx',
   '/App.tsx',

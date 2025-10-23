@@ -2,8 +2,10 @@
   "name": "Momomaya POS",
   "short_name": "Momomaya",
   "description": "A simple point-of-sale application for Momomaya to create and print customer bills.",
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#111827",
   "theme_color": "#1f2937",
   "icons": [
