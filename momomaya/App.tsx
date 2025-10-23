@@ -83,51 +83,57 @@ function App() {
   }
   
   return (
-    <div className="min-h-screen font-sans">
-      <header className="bg-gray-800 shadow-md p-4 flex justify-between items-center print:hidden">
-        <h1 className="text-2xl font-bold text-white tracking-wider">Momomaya</h1>
-        <button
-          onClick={() => setView(view === 'pos' ? 'reports' : 'pos')}
-          className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded transition-colors"
-        >
-          {view === 'pos' ? 'View Reports' : 'Back to POS'}
-        </button>
-      </header>
-      <main className="h-[calc(100vh-68px)] print:hidden">
-        {view === 'pos' ? (
-           <div className="flex flex-col md:flex-row h-full">
-            <div className="md:w-3/5 lg:w-2/3 p-4 overflow-y-auto">
-              <Menu menuItems={MENU_ITEMS} onSelectItem={handleSelectItem} />
+    <>
+      {/* This wrapper contains the entire on-screen UI and is hidden during printing */}
+      <div className="min-h-screen font-sans print:hidden">
+        <header className="bg-gray-800 shadow-md p-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-white tracking-wider">Momomaya</h1>
+          <button
+            onClick={() => setView(view === 'pos' ? 'reports' : 'pos')}
+            className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded transition-colors"
+          >
+            {view === 'pos' ? 'View Reports' : 'Back to POS'}
+          </button>
+        </header>
+        <main className="h-[calc(100vh-68px)]">
+          {view === 'pos' ? (
+             <div className="flex flex-col md:flex-row h-full">
+              <div className="md:w-3/5 lg:w-2/3 p-4 overflow-y-auto">
+                <Menu menuItems={MENU_ITEMS} onSelectItem={handleSelectItem} />
+              </div>
+              <div className="md:w-2/5 lg:w-1/3 bg-gray-800 p-4 flex flex-col">
+                <Bill 
+                  orderItems={order} 
+                  onUpdateQuantity={handleUpdateQuantity}
+                  onClear={handleClearOrder}
+                  onPreview={handlePreviewOrder}
+                />
+              </div>
             </div>
-            <div className="md:w-2/5 lg:w-1/3 bg-gray-800 p-4 flex flex-col">
-              <Bill 
-                orderItems={order} 
-                onUpdateQuantity={handleUpdateQuantity}
-                onClear={handleClearOrder}
-                onPreview={handlePreviewOrder}
-              />
-            </div>
-          </div>
-        ) : (
-          <Analytics />
-        )}
-      </main>
+          ) : (
+            <Analytics />
+          )}
+        </main>
+        
+        <VariantSelectionModal 
+          item={selectedItem}
+          onClose={handleCloseModal}
+          onAddItem={handleAddItem}
+        />
+        <BillPreviewModal
+          isOpen={isPreviewing}
+          onClose={handleClosePreview}
+          onConfirm={handleConfirmPrint}
+          orderItems={order}
+          billNumber={pendingBillNumber}
+        />
+      </div>
+
+      {/* This div is only visible when printing */}
       <div className="hidden print:block">
         <PrintReceipt orderItems={order} billNumber={pendingBillNumber} />
       </div>
-      <VariantSelectionModal 
-        item={selectedItem}
-        onClose={handleCloseModal}
-        onAddItem={handleAddItem}
-      />
-      <BillPreviewModal
-        isOpen={isPreviewing}
-        onClose={handleClosePreview}
-        onConfirm={handleConfirmPrint}
-        orderItems={order}
-        billNumber={pendingBillNumber}
-      />
-    </div>
+    </>
   );
 }
 
