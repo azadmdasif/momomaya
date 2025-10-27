@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { MenuItem as MenuItemType } from '../types';
 import MenuItem from './MenuItem';
 
@@ -8,7 +7,7 @@ interface MenuProps {
   onSelectItem: (item: MenuItemType) => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ menuItems, onSelectItem }) => {
+const Menu = ({ menuItems, onSelectItem }: MenuProps) => {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4 text-brand-brown/90">Menu</h2>

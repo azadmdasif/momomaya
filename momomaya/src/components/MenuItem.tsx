@@ -1,5 +1,5 @@
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { MenuItem as MenuItemType } from '../types';
 
 interface MenuItemProps {
@@ -7,7 +7,7 @@ interface MenuItemProps {
   onSelectItem: (item: MenuItemType) => void;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ item, onSelectItem }) => {
+const MenuItem = ({ item, onSelectItem }: MenuItemProps) => {
   const { minPrice, isSinglePrice } = useMemo(() => {
     const validPrices = Object.values(item.preparations)
       .flatMap(sizes => Object.values(sizes))

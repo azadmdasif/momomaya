@@ -1,6 +1,4 @@
 
-
-import React from 'react';
 import { OrderItem, PaymentMethod } from '../types';
 import PrintReceipt from './PrintReceipt';
 import { TANDOORI_MAYO_ORDER_ITEM } from '../constants';
@@ -16,7 +14,7 @@ interface BillPreviewModalProps {
   onUpdateQuantity: (itemId: string, newQuantity: number) => void;
 }
 
-const BillPreviewModal: React.FC<BillPreviewModalProps> = ({ isOpen, onClose, onConfirm, orderItems, billNumber, branchName, onAddItem, onUpdateQuantity }) => {
+const BillPreviewModal = ({ isOpen, onClose, onConfirm, orderItems, billNumber, branchName, onAddItem, onUpdateQuantity }: BillPreviewModalProps) => {
   if (!isOpen) {
     return null;
   }

@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { OrderItem, PaymentMethod } from '../types';
 
 interface PrintReceiptProps {
@@ -9,7 +8,7 @@ interface PrintReceiptProps {
   branchName?: string | null;
 }
 
-const PrintReceipt: React.FC<PrintReceiptProps> = ({ orderItems, billNumber, paymentMethod, branchName }) => {
+const PrintReceipt = ({ orderItems, billNumber, paymentMethod, branchName }: PrintReceiptProps) => {
   const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const currentDate = new Date();
 

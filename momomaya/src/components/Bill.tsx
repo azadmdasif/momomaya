@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { OrderItem } from '../types';
 import BillItem from './BillItem';
 import { MENU_ITEMS } from '../constants';
@@ -13,7 +12,7 @@ interface BillProps {
   onAddItem: (items: OrderItem[]) => void;
 }
 
-const Bill: React.FC<BillProps> = ({ orderItems, onUpdateQuantity, onClear, onPreview, branchName, onAddItem }) => {
+const Bill = ({ orderItems, onUpdateQuantity, onClear, onPreview, branchName, onAddItem }: BillProps) => {
   const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (

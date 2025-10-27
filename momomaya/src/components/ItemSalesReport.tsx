@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { CompletedOrder } from '../types';
 
 interface ItemSalesReportProps {
@@ -21,7 +21,7 @@ interface SortConfig {
   direction: SortDirection;
 }
 
-const ItemSalesReport: React.FC<ItemSalesReportProps> = ({ orders }) => {
+const ItemSalesReport = ({ orders }: ItemSalesReportProps) => {
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'quantity', direction: 'descending' });
 
   const salesData = useMemo<SalesData[]>(() => {

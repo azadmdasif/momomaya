@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getOrdersForDateRange, getOrderByBillNumber, deleteOrderByBillNumber, getDeletedOrdersForDateRange } from '../utils/storage';
 import { CompletedOrder, PaymentMethod } from '../types';
 import PrintReceipt from './PrintReceipt';
@@ -13,7 +13,7 @@ type DatePreset = 'today' | 'yesterday' | 'last7' | 'last30' | 'custom';
 type ActiveTab = 'active' | 'deleted';
 type ReportView = 'dashboard' | 'itemSales';
 
-const Analytics: React.FC = () => {
+const Analytics = () => {
   const [startDate, setStartDate] = useState<string>(getTodaysDateString());
   const [endDate, setEndDate] = useState<string>(getTodaysDateString());
   const [activePreset, setActivePreset] = useState<DatePreset>('today');

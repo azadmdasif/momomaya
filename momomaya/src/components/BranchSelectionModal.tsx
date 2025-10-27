@@ -1,5 +1,4 @@
 
-import React from 'react';
 
 interface BranchSelectionModalProps {
   isOpen: boolean;
@@ -9,7 +8,7 @@ interface BranchSelectionModalProps {
   isInitialSelection: boolean;
 }
 
-const BranchSelectionModal: React.FC<BranchSelectionModalProps> = ({ isOpen, onClose, onSelectBranch, branches, isInitialSelection }) => {
+const BranchSelectionModal = ({ isOpen, onClose, onSelectBranch, branches, isInitialSelection }: BranchSelectionModalProps) => {
   if (!isOpen) {
     return null;
   }

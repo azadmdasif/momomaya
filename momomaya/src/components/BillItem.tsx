@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { OrderItem } from '../types';
 import { FRIES_ADD_ON_ITEM, TANDOORI_MAYO_ORDER_ITEM } from '../constants';
 
@@ -11,7 +10,7 @@ interface BillItemProps {
   orderItems: OrderItem[];
 }
 
-const BillItem: React.FC<BillItemProps> = ({ item, onUpdateQuantity, isMomo, onAddItem, orderItems }) => {
+const BillItem = ({ item, onUpdateQuantity, isMomo, onAddItem, orderItems }: BillItemProps) => {
   const addOnFriesId = `${FRIES_ADD_ON_ITEM.id}-${item.id}`;
   const hasFriesAddOn = isMomo && orderItems.some(i => i.id === addOnFriesId);
 

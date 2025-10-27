@@ -1,7 +1,6 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { MenuItem, OrderItem, PreparationType, Size } from '../types';
-import { FRIES_ADD_ON_ITEM } from '../constants';
 
 interface VariantSelectionModalProps {
   item: MenuItem | null;
@@ -9,7 +8,7 @@ interface VariantSelectionModalProps {
   onAddItem: (items: OrderItem[]) => void;
 }
 
-const VariantSelectionModal: React.FC<VariantSelectionModalProps> = ({ item, onClose, onAddItem }) => {
+const VariantSelectionModal = ({ item, onClose, onAddItem }: VariantSelectionModalProps) => {
   const [selectedPrep, setSelectedPrep] = useState<PreparationType>('steamed');
   const [selectedSize, setSelectedSize] = useState<Size>('medium');
   const [quantity, setQuantity] = useState(1);

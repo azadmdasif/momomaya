@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DeleteBillModalProps {
   isOpen: boolean;
@@ -8,7 +8,7 @@ interface DeleteBillModalProps {
   billNumber: number | null;
 }
 
-const DeleteBillModal: React.FC<DeleteBillModalProps> = ({ isOpen, onClose, onConfirm, billNumber }) => {
+const DeleteBillModal = ({ isOpen, onClose, onConfirm, billNumber }: DeleteBillModalProps) => {
   const [reason, setReason] = useState('');
 
   // Reset reason when modal opens for a new bill

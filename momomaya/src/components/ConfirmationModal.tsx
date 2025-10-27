@@ -9,7 +9,7 @@ interface ConfirmationModalProps {
   children: React.ReactNode;
 }
 
-const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, onConfirm, title, children }) => {
+const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, children }: ConfirmationModalProps) => {
   if (!isOpen) return null;
 
   return (
