@@ -17,7 +17,11 @@ const APP_SHELL_URLS = [
   '/components/PrintReceipt.tsx',
   '/components/VariantSelectionModal.tsx',
   '/components/Analytics.tsx',
-  '/components/BillPreviewModal.tsx'
+  '/components/BillPreviewModal.tsx',
+  '/components/ConfirmationModal.tsx',
+  '/components/DeleteBillModal.tsx',
+  '/components/BranchSelectionModal.tsx',
+  '/components/ItemSalesReport.tsx'
 ];
 
 // On install, cache the app shell

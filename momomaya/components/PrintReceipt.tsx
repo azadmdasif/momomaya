@@ -1,12 +1,14 @@
 import React from 'react';
-import { OrderItem } from '../types';
+import { OrderItem, PaymentMethod } from '../types';
 
 interface PrintReceiptProps {
   orderItems: OrderItem[];
   billNumber?: number | null;
+  paymentMethod?: PaymentMethod | null;
+  branchName?: string | null;
 }
 
-const PrintReceipt: React.FC<PrintReceiptProps> = ({ orderItems, billNumber }) => {
+const PrintReceipt: React.FC<PrintReceiptProps> = ({ orderItems, billNumber, paymentMethod, branchName }) => {
   const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const currentDate = new Date();
 
@@ -14,20 +16,19 @@ const PrintReceipt: React.FC<PrintReceiptProps> = ({ orderItems, billNumber }) =
     <div className="w-48 mx-auto p-1 bg-white text-black font-mono text-xs print-container">
       <div className="text-center">
         {/* Momo Icon */}
-        <svg className="w-10 h-10 mx-auto mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 12C4 12 6.5 9 10 9C13.5 9 15.5 7 19 7C22.5 7 20 12 20 12C20 12 16.5 13 14 14C11.5 15 4 12 4 12Z" />
-          <path d="M10 9C10 9 9.5 7.5 10 7C10.5 6.5 12 6.5 12.5 7C13 7.5 13.5 9 13.5 9" />
-          <path d="M13 9C13 9 12.5 7.5 13 7C13.5 6.5 15 6.5 15.5 7C16 7.5 16.5 9 16.5 9" />
+        <svg className="w-10 h-10 mx-auto mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M18 12.5C18 16.0376 15.3137 19 12 19C8.68629 19 6 16.0376 6 12.5C6 9 12 6.5 12 6.5C12 6.5 18 9 18 12.5Z M12 6.5C11.5 8 10 8.5 9 9.5 M12 6.5C12.5 8 14 8.5 15 9.5 M10 4.5C10.5 3.5 11 3 12 3C13 3 13.5 3.5 14 4.5 M11 2C11.5 1.5 12 1 12 1C12 1 12.5 1.5 13 2" />
         </svg>
         <h1 className="font-bold text-base">Momomaya</h1>
         <p className="text-[10px]">Have Momo, beat FOMO</p>
-        <p className="text-[10px]">Asansol</p>
+        {branchName && <p className="text-[10px] font-semibold">{branchName}</p>}
       </div>
       <div className="border-b border-dashed border-black my-1"></div>
       <div className="my-1">
         {billNumber && <p>Bill No: {billNumber}</p>}
         <p>Date: {currentDate.toLocaleDateString()}</p>
         <p>Time: {currentDate.toLocaleTimeString()}</p>
+        {paymentMethod && <p>Payment: {paymentMethod}</p>}
       </div>
       <div className="border-b border-dashed border-black my-1"></div>
       <table className="w-full text-xs">
