@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { OrderItem, PaymentMethod } from '../types';
 import PrintReceipt from './PrintReceipt';
@@ -20,12 +21,15 @@ const BillPreviewModal: React.FC<BillPreviewModalProps> = ({ isOpen, onClose, on
     return null;
   }
   
-  const hasMayo = orderItems.some(item => item.id === TANDOORI_MAYO_ORDER_ITEM.id);
+  const hasMayo = orderItems.some(item => item.menuItemId === TANDOORI_MAYO_ORDER_ITEM.menuItemId && !item.parentItemId);
+
 
   const handleToggleMayo = () => {
     if (hasMayo) {
-      // To remove it entirely, we can just call update with 0 quantity
-      onUpdateQuantity(TANDOORI_MAYO_ORDER_ITEM.id, 0);
+      const mayoItem = orderItems.find(item => item.menuItemId === TANDOORI_MAYO_ORDER_ITEM.menuItemId && !item.parentItemId);
+      if(mayoItem) {
+        onUpdateQuantity(mayoItem.id, 0);
+      }
     } else {
       // Add one mayo
       onAddItem([{...TANDOORI_MAYO_ORDER_ITEM, quantity: 1}]);
@@ -36,7 +40,7 @@ const BillPreviewModal: React.FC<BillPreviewModalProps> = ({ isOpen, onClose, on
 
   return (
     <div 
-      className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4 print:hidden"
       onClick={onClose}
       aria-modal="true"
       role="dialog"
