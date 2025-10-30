@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { MenuItem, OrderItem, PreparationType, Size } from '../types';
-import { FRIES_ADD_ON_ITEM } from '../constants';
 
 interface VariantSelectionModalProps {
   item: MenuItem | null;
