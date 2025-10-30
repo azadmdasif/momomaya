@@ -256,7 +256,13 @@ const Analytics: React.FC = () => {
                         </div>
                     )}
                     <div className="bg-white rounded p-2 mx-auto w-fit shadow-inner">
-                      <PrintReceipt orderItems={foundOrder.items} billNumber={foundOrder.billNumber} paymentMethod={foundOrder.paymentMethod} branchName={foundOrder.branchName} />
+                      <PrintReceipt 
+                        orderItems={foundOrder.items} 
+                        billNumber={foundOrder.billNumber} 
+                        paymentMethod={foundOrder.paymentMethod} 
+                        branchName={foundOrder.branchName} 
+                        date={foundOrder.date}
+                      />
                     </div>
                   </div>
                 )}
