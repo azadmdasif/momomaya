@@ -57,10 +57,10 @@ export const MENU_ITEMS: MenuItem[] = [
     image: 'https://cdn1.foodviva.com/static-content/food-images/snacks-recipes/veg-momos/veg-momos.jpg',
     category: 'momo',
     preparations: {
-      steamed: { small: 30, medium: 45, large: 55 },
-      fried: { small: 40, medium: 55, large: 65 },
+      steamed: { small: 30, medium: 40, large: 50 },
+      fried: { small: 40, medium: 50, large: 60 },
       normal: { small: -1, medium: -1, large: -1 },
-      'peri-peri': { small: 40, medium: 55, large: 65 },
+      'peri-peri': { small: 40, medium: 50, large: 60 },
     },
     costs: {
         steamed: { small: 12, medium: 18, large: 24 },
