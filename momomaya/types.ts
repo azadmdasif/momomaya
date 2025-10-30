@@ -13,6 +13,11 @@ export interface MenuItem {
       [key in Size]: number;
     };
   };
+  costs: {
+    [key in PreparationType]?: {
+      [key in Size]?: number;
+    };
+  };
 }
 
 export interface OrderItem {
@@ -20,6 +25,7 @@ export interface OrderItem {
     menuItemId: string; // The ID of the base MenuItem, e.g. 'chicken-tandoori'
     name: string; // A descriptive name, e.g., 'Steamed Chicken Momo (Medium)'
     price: number;
+    cost: number;
     quantity: number;
     parentItemId?: string; // Links an add-on item to its parent
 }

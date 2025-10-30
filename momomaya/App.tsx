@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { MENU_ITEMS, BRANCHES } from './constants';
 import { MenuItem as MenuItemType, OrderItem, PaymentMethod } from './types';
-import Menu from './components/Menu';
-import Bill from './components/Bill';
-import PrintReceipt from './components/PrintReceipt';
-import VariantSelectionModal from './components/VariantSelectionModal';
-import Analytics from './components/Analytics';
-import BillPreviewModal from './components/BillPreviewModal';
-import BranchSelectionModal from './components/BranchSelectionModal';
-import { saveCompletedOrder, peekNextBillNumber, getSelectedBranch, setSelectedBranch } from './utils/storage';
+import Menu from './Menu';
+import Bill from './Bill';
+import PrintReceipt from './PrintReceipt';
+import VariantSelectionModal from './VariantSelectionModal';
+import Analytics from './Analytics';
+import BillPreviewModal from './BillPreviewModal';
+import BranchSelectionModal from './BranchSelectionModal';
+import { saveCompletedOrder, peekNextBillNumber, getSelectedBranch, setSelectedBranch } from './storage';
 
 function App() {
   const [order, setOrder] = useState<OrderItem[]>([]);

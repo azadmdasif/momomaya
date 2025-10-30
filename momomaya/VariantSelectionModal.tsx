@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { MenuItem, OrderItem, PreparationType, Size } from '../types';
-import { FRIES_ADD_ON_ITEM } from '../constants';
+import { MenuItem, OrderItem, PreparationType, Size } from './types';
 
 interface VariantSelectionModalProps {
   item: MenuItem | null;
@@ -51,8 +50,7 @@ const VariantSelectionModal: React.FC<VariantSelectionModalProps> = ({ item, onC
     if (!item) return 0;
     return item.preparations[selectedPrep]?.[selectedSize] ?? 0;
   }, [item, selectedPrep, selectedSize]);
-
-  // FIX: Calculate the cost for the selected item variant.
+  
   const currentCost = useMemo(() => {
     if (!item || !item.costs) return 0;
     return item.costs[selectedPrep]?.[selectedSize] ?? 0;
@@ -80,7 +78,6 @@ const VariantSelectionModal: React.FC<VariantSelectionModalProps> = ({ item, onC
       menuItemId: item.id,
       name: name,
       price: currentPrice,
-      // FIX: Add the required 'cost' property to the OrderItem.
       cost: currentCost,
       quantity: quantity,
     };
