@@ -23,10 +23,10 @@ export const MENU_ITEMS: MenuItem[] = [
     image: 'https://static.toiimg.com/thumb/60275824.cms?imgsize=1041917&width=800&height=800',
     category: 'momo',
     preparations: {
-      steamed: { small: 40, medium: 60, large: 80 },
-      fried: { small: 50, medium: 70, large: 90 },
+      steamed: { small: 40, medium: 50, large: 65 },
+      fried: { small: 50, medium: 60, large: 75 },
       normal: { small: -1, medium: -1, large: -1 },
-      'peri-peri': { small: 50, medium: 70, large: 90 },
+      'peri-peri': { small: 50, medium: 60, large: 75 },
     },
     costs: {
         steamed: { small: 16, medium: 24, large: 32 },
