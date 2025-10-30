@@ -6,11 +6,12 @@ interface PrintReceiptProps {
   billNumber?: number | null;
   paymentMethod?: PaymentMethod | null;
   branchName?: string | null;
+  date?: string | Date | null;
 }
 
-const PrintReceipt: React.FC<PrintReceiptProps> = ({ orderItems, billNumber, paymentMethod, branchName }) => {
+const PrintReceipt: React.FC<PrintReceiptProps> = ({ orderItems, billNumber, paymentMethod, branchName, date }) => {
   const total = orderItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const currentDate = new Date();
+  const transactionDate = date ? new Date(date) : new Date();
 
   return (
     <div className="w-48 mx-auto p-1 bg-white text-black font-mono text-xs print-container">
@@ -26,8 +27,8 @@ const PrintReceipt: React.FC<PrintReceiptProps> = ({ orderItems, billNumber, pay
       <div className="border-b border-dashed border-black my-1"></div>
       <div className="my-1">
         {billNumber && <p>Bill No: {billNumber}</p>}
-        <p>Date: {currentDate.toLocaleDateString()}</p>
-        <p>Time: {currentDate.toLocaleTimeString()}</p>
+        <p>Date: {transactionDate.toLocaleDateString()}</p>
+        <p>Time: {transactionDate.toLocaleTimeString()}</p>
         {paymentMethod && <p>Payment: {paymentMethod}</p>}
       </div>
       <div className="border-b border-dashed border-black my-1"></div>
