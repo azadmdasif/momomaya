@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { MENU_ITEMS, BRANCHES } from './constants';
 import { MenuItem as MenuItemType, OrderItem, PaymentMethod } from './types';
 import Menu from './Menu';
