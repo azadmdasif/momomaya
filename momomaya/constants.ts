@@ -173,7 +173,7 @@ export const MENU_ITEMS: MenuItem[] = [
       steamed: { small: -1, medium: -1, large: -1 },
       fried: { small: -1, medium: -1, large: -1 },
       normal: { small: 40, medium: 55, large: 65 },
-      'peri-peri': { small: 50, medium: -1, large: -1 },
+      'peri-peri': { small: 50, medium: 65, large: 75 },
     },
     costs: {
         normal: { small: 10, medium: 15, large: 20 },
