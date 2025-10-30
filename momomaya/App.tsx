@@ -193,7 +193,7 @@ function App() {
           <Analytics />
         )}
       </main>
-      <div className="hidden print:block">
+      <div id="printable-receipt" className="hidden print:block">
         <PrintReceipt 
           orderItems={order} 
           billNumber={pendingBillNumber} 
