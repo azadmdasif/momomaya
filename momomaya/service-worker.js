@@ -9,19 +9,19 @@ const APP_SHELL_URLS = [
   '/App.tsx',
   '/types.ts',
   '/constants.ts',
-  '/storage.ts',
-  '/Menu.tsx',
-  '/MenuItem.tsx',
-  '/Bill.tsx',
-  '/BillItem.tsx',
-  '/PrintReceipt.tsx',
-  '/VariantSelectionModal.tsx',
-  '/Analytics.tsx',
-  '/BillPreviewModal.tsx',
-  '/ConfirmationModal.tsx',
-  '/DeleteBillModal.tsx',
-  '/BranchSelectionModal.tsx',
-  '/ItemSalesReport.tsx'
+  '/utils/storage.ts',
+  '/components/Menu.tsx',
+  '/components/MenuItem.tsx',
+  '/components/Bill.tsx',
+  '/components/BillItem.tsx',
+  '/components/PrintReceipt.tsx',
+  '/components/VariantSelectionModal.tsx',
+  '/components/Analytics.tsx',
+  '/components/BillPreviewModal.tsx',
+  '/components/ConfirmationModal.tsx',
+  '/components/DeleteBillModal.tsx',
+  '/components/BranchSelectionModal.tsx',
+  '/components/ItemSalesReport.tsx'
 ];
 
 // On install, cache the app shell
