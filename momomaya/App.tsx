@@ -1,14 +1,14 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { MENU_ITEMS, BRANCHES } from './constants';
 import { MenuItem as MenuItemType, OrderItem, PaymentMethod } from './types';
-import Menu from './Menu';
-import Bill from './Bill';
-import PrintReceipt from './PrintReceipt';
-import VariantSelectionModal from './VariantSelectionModal';
-import Analytics from './Analytics';
-import BillPreviewModal from './BillPreviewModal';
-import BranchSelectionModal from './BranchSelectionModal';
-import { saveCompletedOrder, peekNextBillNumber, getSelectedBranch, setSelectedBranch } from './storage';
+import Menu from './components/Menu';
+import Bill from './components/Bill';
+import PrintReceipt from './components/PrintReceipt';
+import VariantSelectionModal from './components/VariantSelectionModal';
+import Analytics from './components/Analytics';
+import BillPreviewModal from './components/BillPreviewModal';
+import BranchSelectionModal from './components/BranchSelectionModal';
+import { saveCompletedOrder, peekNextBillNumber, getSelectedBranch, setSelectedBranch } from './utils/storage';
 
 function App() {
   const [order, setOrder] = useState<OrderItem[]>([]);
@@ -19,6 +19,7 @@ function App() {
   const [paymentMethodForPrint, setPaymentMethodForPrint] = useState<PaymentMethod | null>(null);
   const [currentBranch, setCurrentBranch] = useState<string | null>(null);
   const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
+  const originalDocumentTitle = useRef(document.title);
 
   useEffect(() => {
     const branch = getSelectedBranch();
@@ -123,16 +124,37 @@ function App() {
     if (order.length === 0 || !currentBranch) return;
 
     const total = order.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const billNumberToPrint = pendingBillNumber;
 
     setPaymentMethodForPrint(paymentMethod);
     saveCompletedOrder(order, total, paymentMethod, currentBranch);
 
+    // Using a short timeout to ensure state updates have been processed before printing
     setTimeout(() => {
+      // Set a unique title for the PDF/print job
+      if (billNumberToPrint) {
+        document.title = `Momomaya-Bill-${billNumberToPrint}`;
+      }
+
+      const handleAfterPrint = () => {
+        // Restore the original title
+        document.title = originalDocumentTitle.current;
+        
+        // Reset the order and UI state
+        handleClearOrder();
+        setIsPreviewing(false);
+        setPendingBillNumber(null);
+        setPaymentMethodForPrint(null);
+        
+        // Clean up the event listener
+        window.removeEventListener('afterprint', handleAfterPrint);
+      };
+
+      // Add the event listener for after the print dialog is closed
+      window.addEventListener('afterprint', handleAfterPrint);
+
+      // Trigger the print dialog
       window.print();
-      handleClearOrder();
-      setIsPreviewing(false);
-      setPendingBillNumber(null);
-      setPaymentMethodForPrint(null);
     }, 100);
   };
 
