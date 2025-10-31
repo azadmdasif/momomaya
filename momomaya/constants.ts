@@ -23,10 +23,10 @@ export const MENU_ITEMS: MenuItem[] = [
     image: 'https://static.toiimg.com/thumb/60275824.cms?imgsize=1041917&width=800&height=800',
     category: 'momo',
     preparations: {
-      steamed: { small: 40, medium: 50, large: 65 },
-      fried: { small: 50, medium: 60, large: 75 },
+      steamed: { small: 40, medium: 60, large: 80 },
+      fried: { small: 50, medium: 70, large: 90 },
       normal: { small: -1, medium: -1, large: -1 },
-      'peri-peri': { small: 50, medium: 60, large: 75 },
+      'peri-peri': { small: 50, medium: 70, large: 90 },
     },
     costs: {
         steamed: { small: 16, medium: 24, large: 32 },
@@ -57,10 +57,10 @@ export const MENU_ITEMS: MenuItem[] = [
     image: 'https://cdn1.foodviva.com/static-content/food-images/snacks-recipes/veg-momos/veg-momos.jpg',
     category: 'momo',
     preparations: {
-      steamed: { small: 30, medium: 40, large: 50 },
-      fried: { small: 40, medium: 50, large: 60 },
+      steamed: { small: 30, medium: 45, large: 55 },
+      fried: { small: 40, medium: 55, large: 65 },
       normal: { small: -1, medium: -1, large: -1 },
-      'peri-peri': { small: 40, medium: 50, large: 60 },
+      'peri-peri': { small: 40, medium: 55, large: 65 },
     },
     costs: {
         steamed: { small: 12, medium: 18, large: 24 },
@@ -173,7 +173,7 @@ export const MENU_ITEMS: MenuItem[] = [
       steamed: { small: -1, medium: -1, large: -1 },
       fried: { small: -1, medium: -1, large: -1 },
       normal: { small: 40, medium: 55, large: 65 },
-      'peri-peri': { small: 50, medium: 65, large: 75 },
+      'peri-peri': { small: 50, medium: -1, large: -1 },
     },
     costs: {
         normal: { small: 10, medium: 15, large: 20 },

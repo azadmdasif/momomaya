@@ -10,9 +10,11 @@ interface SalesData {
   name: string;
   quantity: number;
   revenue: number;
+  cogs: number;
+  profit: number;
 }
 
-type SortKey = 'name' | 'quantity' | 'revenue';
+type SortKey = 'name' | 'quantity' | 'revenue' | 'cogs' | 'profit';
 type SortDirection = 'ascending' | 'descending';
 
 interface SortConfig {
@@ -21,29 +23,37 @@ interface SortConfig {
 }
 
 const ItemSalesReport: React.FC<ItemSalesReportProps> = ({ orders }) => {
-  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'quantity', direction: 'descending' });
+  const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'profit', direction: 'descending' });
 
   const salesData = useMemo<SalesData[]>(() => {
-    const itemMap = new Map<string, { name: string; quantity: number; revenue: number }>();
+    const itemMap = new Map<string, { name: string; quantity: number; revenue: number; cogs: number }>();
 
     orders.forEach(order => {
       order.items.forEach(item => {
+        const itemRevenue = item.price * item.quantity;
+        const itemCogs = (item.cost ?? 0) * item.quantity;
         const existing = itemMap.get(item.id);
+
         if (existing) {
           existing.quantity += item.quantity;
-          existing.revenue += item.quantity * item.price;
+          existing.revenue += itemRevenue;
+          existing.cogs += itemCogs;
         } else {
           itemMap.set(item.id, {
             name: item.name,
             quantity: item.quantity,
-            revenue: item.quantity * item.price,
+            revenue: itemRevenue,
+            cogs: itemCogs,
           });
         }
       });
     });
     
-    // convert map to array
-    return Array.from(itemMap.entries()).map(([id, data]) => ({ id, ...data }));
+    return Array.from(itemMap.entries()).map(([id, data]) => ({ 
+        id, 
+        ...data,
+        profit: data.revenue - data.cogs,
+    }));
   }, [orders]);
 
   const sortedSalesData = useMemo(() => {
@@ -77,22 +87,28 @@ const ItemSalesReport: React.FC<ItemSalesReportProps> = ({ orders }) => {
     return sortConfig.direction === 'descending' ? ' ▼' : ' ▲';
   };
 
+  const SortableHeader = ({ label, sortKey, align = 'left' }: { label: string; sortKey: SortKey, align?: 'left' | 'center' | 'right' }) => (
+    <th
+      scope="col"
+      className={`px-4 py-3 cursor-pointer select-none text-${align}`}
+      onClick={() => requestSort(sortKey)}
+    >
+      {label} {getSortIndicator(sortKey)}
+    </th>
+  );
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mt-6 border border-brand-brown/10">
-      <h3 className="text-xl font-semibold mb-4 border-b border-brand-brown/10 pb-2">Item Sales Report</h3>
+      <h3 className="text-xl font-semibold mb-4 border-b border-brand-brown/10 pb-2">Item Sales & Profit Report</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
           <thead className="bg-brand-brown/5 text-xs text-brand-brown/60 uppercase">
             <tr>
-              <th scope="col" className="px-4 py-3 cursor-pointer select-none" onClick={() => requestSort('name')}>
-                Item Name {getSortIndicator('name')}
-              </th>
-              <th scope="col" className="px-4 py-3 text-center cursor-pointer select-none" onClick={() => requestSort('quantity')}>
-                Quantity Sold {getSortIndicator('quantity')}
-              </th>
-              <th scope="col" className="px-4 py-3 text-right cursor-pointer select-none" onClick={() => requestSort('revenue')}>
-                Total Revenue {getSortIndicator('revenue')}
-              </th>
+              <SortableHeader label="Item Name" sortKey="name" />
+              <SortableHeader label="Quantity Sold" sortKey="quantity" align="center" />
+              <SortableHeader label="Total Revenue" sortKey="revenue" align="right" />
+              <SortableHeader label="Total Cost" sortKey="cogs" align="right" />
+              <SortableHeader label="Gross Profit" sortKey="profit" align="right" />
             </tr>
           </thead>
           <tbody>
@@ -101,6 +117,8 @@ const ItemSalesReport: React.FC<ItemSalesReportProps> = ({ orders }) => {
                 <td className="px-4 py-3 font-medium text-brand-brown">{item.name}</td>
                 <td className="px-4 py-3 text-center">{item.quantity}</td>
                 <td className="px-4 py-3 text-right font-semibold">₹{item.revenue.toFixed(2)}</td>
+                <td className="px-4 py-3 text-right font-semibold text-brand-red">₹{item.cogs.toFixed(2)}</td>
+                <td className="px-4 py-3 text-right font-semibold text-green-600">₹{item.profit.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>

@@ -39,8 +39,6 @@ const Analytics: React.FC = () => {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    // Fetch both active and deleted orders whenever the date range changes.
-    // These are used by different parts of the reports page.
     fetchOrders();
     fetchDeletedOrders();
   }, [fetchOrders, fetchDeletedOrders]);
@@ -117,22 +115,35 @@ const Analytics: React.FC = () => {
     }
   };
 
-  const { totalRevenue, averageOrderValue, paymentBreakdown } = useMemo(() => {
+  const financialData = useMemo(() => {
     let revenue = 0;
+    let cogs = 0;
     const breakdown: Record<PaymentMethod, number> = { 'Cash': 0, 'UPI': 0, 'Card': 0 };
 
     orders.forEach(order => {
       revenue += order.total;
+      const orderCogs = order.items.reduce((acc, item) => {
+        return acc + (item.cost ?? 0) * item.quantity;
+      }, 0);
+      cogs += orderCogs;
+
       if (order.paymentMethod in breakdown) {
         breakdown[order.paymentMethod] += order.total;
       }
     });
     
+    const grossProfit = revenue - cogs;
+    const profitMargin = revenue > 0 ? (grossProfit / revenue) * 100 : 0;
     const avgOrderValue = orders.length > 0 ? revenue / orders.length : 0;
+
     return { 
       totalRevenue: revenue, 
+      totalCogs: cogs,
+      grossProfit,
+      profitMargin,
       averageOrderValue: avgOrderValue,
       paymentBreakdown: breakdown,
+      totalOrders: orders.length,
     };
   }, [orders]);
 
@@ -144,7 +155,7 @@ const Analytics: React.FC = () => {
 
     const headers = [
       "Bill #", "Date", "Time", "Branch", "Payment Method", "Order Total",
-      "Item Name", "Item Quantity", "Item Price", "Item Subtotal"
+      "Item Name", "Item Quantity", "Item Price", "Item Cost", "Item Subtotal", "Item Total Cost", "Item Profit"
     ];
 
     const csvRows = [headers.join(',')];
@@ -155,6 +166,10 @@ const Analytics: React.FC = () => {
       const time = orderDate.toLocaleTimeString('en-US', { hour12: false });
 
       order.items.forEach(item => {
+        const itemCost = item.cost ?? 0;
+        const subtotal = item.quantity * item.price;
+        const totalCost = item.quantity * itemCost;
+        const profit = subtotal - totalCost;
         const row = [
           order.billNumber,
           date,
@@ -162,10 +177,13 @@ const Analytics: React.FC = () => {
           `"${order.branchName.replace(/"/g, '""')}"`,
           order.paymentMethod,
           order.total.toFixed(2),
-          `"${item.name.replace(/"/g, '""')}"`, // Handle potential commas/quotes
+          `"${item.name.replace(/"/g, '""')}"`,
           item.quantity,
           item.price.toFixed(2),
-          (item.quantity * item.price).toFixed(2)
+          itemCost.toFixed(2),
+          subtotal.toFixed(2),
+          totalCost.toFixed(2),
+          profit.toFixed(2)
         ];
         csvRows.push(row.join(','));
       });
@@ -175,7 +193,7 @@ const Analytics: React.FC = () => {
     const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    const fileName = `Momomaya_Sales_Report_${startDate}_to_${endDate}.csv`;
+    const fileName = `Momomaya_Financial_Report_${startDate}_to_${endDate}.csv`;
     
     link.setAttribute('href', url);
     link.setAttribute('download', fileName);
@@ -230,6 +248,17 @@ const Analytics: React.FC = () => {
           {/* Conditional Content */}
           {reportView === 'dashboard' && (
             <div className="mt-6">
+              <FinancialSummaryCard data={financialData} />
+              
+              <div className="bg-white p-4 rounded-lg shadow-md my-6 border border-brand-brown/10">
+                <h3 className="text-sm font-medium text-brand-brown/70 mb-2">Revenue by Payment Method</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <PaymentMetric title="Cash" value={`₹${financialData.paymentBreakdown.Cash.toFixed(2)}`} />
+                  <PaymentMetric title="UPI" value={`₹${financialData.paymentBreakdown.UPI.toFixed(2)}`} />
+                  <PaymentMetric title="Card" value={`₹${financialData.paymentBreakdown.Card.toFixed(2)}`} />
+                </div>
+              </div>
+              
               {/* Search Section */}
               <div className="bg-white p-4 rounded-lg shadow-md mb-6 border border-brand-brown/10">
                 <h3 className="text-lg font-semibold mb-2">Find a Bill</h3>
@@ -266,21 +295,6 @@ const Analytics: React.FC = () => {
                     </div>
                   </div>
                 )}
-              </div>
-
-              {/* Summary Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                <MetricCard title="Total Revenue (Active)" value={`₹${totalRevenue.toFixed(2)}`} />
-                <MetricCard title="Total Orders (Active)" value={orders.length.toString()} />
-                <MetricCard title="Avg. Order Value" value={`₹${averageOrderValue.toFixed(2)}`} />
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow-md mb-6 border border-brand-brown/10">
-                <h3 className="text-sm font-medium text-brand-brown/70 mb-2">Revenue by Payment Method</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <PaymentMetric title="Cash" value={`₹${paymentBreakdown.Cash.toFixed(2)}`} />
-                  <PaymentMetric title="UPI" value={`₹${paymentBreakdown.UPI.toFixed(2)}`} />
-                  <PaymentMetric title="Card" value={`₹${paymentBreakdown.Card.toFixed(2)}`} />
-                </div>
               </div>
               
               {/* Tabs for Orders List */}
@@ -324,6 +338,27 @@ const TabButton = ({label, isActive, onClick}: {label: string, isActive: boolean
         {label}
     </button>
 )
+
+const FinancialSummaryCard = ({ data }: { data: ReturnType<typeof useMemo> extends { financialData: infer T } ? T : any }) => (
+  <div className="bg-white p-6 rounded-lg shadow-md border border-brand-brown/10">
+    <h3 className="text-lg font-semibold mb-4 text-brand-brown">Financial Summary</h3>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <Metric title="Total Revenue" value={`₹${data.totalRevenue.toFixed(2)}`} />
+      <Metric title="Total COGS" value={`₹${data.totalCogs.toFixed(2)}`} />
+      <Metric title="Gross Profit" value={`₹${data.grossProfit.toFixed(2)}`} isProfit />
+      <Metric title="Profit Margin" value={`${data.profitMargin.toFixed(1)}%`} isProfit />
+      <Metric title="Total Orders" value={data.totalOrders.toString()} />
+      <Metric title="Avg. Order Value" value={`₹${data.averageOrderValue.toFixed(2)}`} />
+    </div>
+  </div>
+);
+
+const Metric = ({ title, value, isProfit = false }: { title: string, value: string, isProfit?: boolean }) => (
+  <div>
+    <h4 className="text-sm font-medium text-brand-brown/70 whitespace-nowrap">{title}</h4>
+    <p className={`text-3xl font-extrabold ${isProfit ? 'text-green-600' : 'text-brand-brown'}`}>{value}</p>
+  </div>
+);
 
 const ActiveOrdersList = ({ orders, onDeleteClick }: { orders: CompletedOrder[], onDeleteClick: (order: CompletedOrder) => void}) => (
   <div className="bg-white rounded-lg shadow-md p-4 border border-brand-brown/10">
@@ -392,13 +427,6 @@ const DeletedOrdersList = ({ orders }: { orders: CompletedOrder[] }) => (
       </table>
       {orders.length === 0 && <p className="text-center py-8 text-brand-brown/60">No deleted bills found for this date range.</p>}
     </div>
-  </div>
-);
-
-const MetricCard = ({ title, value }: { title: string; value: string }) => (
-  <div className="bg-white p-4 rounded-lg shadow-md border border-brand-brown/10">
-    <h3 className="text-sm font-medium text-brand-brown/70">{title}</h3>
-    <p className="text-3xl font-extrabold text-brand-red">{value}</p>
   </div>
 );
 
